@@ -28,10 +28,11 @@ import select
 import sys
 import time
 
-# The full-size "MX Keys" and "MX Keys S" only -- not "MX Keys Mini", "MX
-# Mechanical", or the "... for Mac" editions.
+# "MX Keys", "MX Keys S" and "MX Keys Mini" -- the Mini's action row sends the
+# same chords as the S, so one ruleset covers all three. Not "MX Mechanical" or
+# the "... for Mac" editions.
 NAME_RE = re.compile(r"\bmx keys(?: s)?\b", re.IGNORECASE)
-NAME_EXCLUDE = ("mini", "mechanical", "mac")
+NAME_EXCLUDE = ("mechanical", "mac")
 
 # "MX Keys" (non-S) pairs only over Bluetooth or a Unifying receiver. Behind
 # Unifying the logitech-hidpp driver still exports this wireless PID even when
