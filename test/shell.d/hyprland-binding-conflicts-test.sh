@@ -216,7 +216,7 @@ pass "rebinding replaces all bindings for a key and preserves binding options"
 mx_gate="$tmpdir/mx-keys-keyd.conf"
 touch "$mx_gate"
 mx_bindings=$(OMARCHY_MX_KEYS_KEYD_CONF="$mx_gate" PATH="$stub_bin:$PATH" list_bindings "$home")
-for keycode in code:191 code:192 code:193 code:194 code:195 code:196 code:197; do
+for keycode in code:191 code:192 code:193 code:194 code:195; do
   grep -Fq $'\t'"$keycode"$'\t' <<<"$mx_bindings" ||
     fail "the MX Keys bind on $keycode registers when the keyd config is present"
 done

@@ -1,13 +1,13 @@
 -- Logitech MX Keys / MX Keys S -- action keys
 --
--- keyd (/etc/keyd/logitech-mx-keys.conf) rewrites each keyboard's chorded
--- action keys -- emoji, screenshot, dictation, lock on the MX Keys S; float
--- toggle, scratchpad, lock on the MX Keys -- to spare F14-F19, all of which
+-- keyd (/etc/keyd/logitech-mx-keys.conf) rewrites the MX Keys S's chorded
+-- action keys -- emoji, screenshot, dictation, lock -- to spare F14-F17, which
 -- would otherwise land on unrelated shortcuts or nothing. The MX Keys S
--- mic-mute key already emits a bare F13. Bind them to the matching Omarchy
--- command here.
+-- mic-mute key already emits a bare F13. The MX Keys (non-S) has no action
+-- row of its own, so its Super+A / Super+D chords are left untouched and
+-- nothing here binds them. Bind the rest to the matching Omarchy command here.
 --
--- Bound by keycode (code:191..197 == F13..F19): the F13-F24 keysyms are
+-- Bound by keycode (code:191..195 == F13..F17): the F13-F24 keysyms are
 -- missing from many non-US keymaps, so a plain "F14" bind would never match.
 --
 -- That config file is installed only when install/hardware/logitech-mx-keys.sh
@@ -37,8 +37,6 @@ o.bind("code:191", "Mute microphone", "omarchy-audio-input-mute", { locked = tru
 o.bind("code:192", "Emojis", "omarchy-shell shell toggle omarchy.emojis")
 o.bind("code:193", "Screenshot", "omarchy-capture-screenshot")
 o.bind("code:195", "Lock system", "omarchy-system-lock")
-o.bind("code:196", "Toggle window floating/tiling", hl.dsp.window.float({ action = "toggle" }))
-o.bind("code:197", "Toggle scratchpad", hl.dsp.workspace.toggle_special("scratchpad"))
 
 if o.cmd_present("voxtype") then
   o.bind("code:194", "Toggle dictation", "voxtype record toggle")
