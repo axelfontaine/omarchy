@@ -63,6 +63,7 @@ SH
 
 cat >"$TMPDIR/bin/wl-copy" <<'SH'
 #!/bin/bash
+printf '%s' "$*" >"$WLCOPY_OUT.args"
 cat >"$WLCOPY_OUT"
 SH
 
@@ -151,11 +152,11 @@ env "${term_env[@]}" WTYPE_OUT="$TMPDIR/wtype-gui" WLCOPY_OUT="$TMPDIR/wlcopy-gu
 [[ $(<"$TMPDIR/wlcopy-gui") == "😀" ]] || fail "emoji insert helper puts the emoji on the clipboard for a GUI app"
 pass "emoji insert helper puts the emoji on the clipboard for a GUI app"
 
-grep -q "ctrl" "$TMPDIR/wtype-gui" || fail "emoji insert helper sends Ctrl+V to paste into a GUI app"
-pass "emoji insert helper sends Ctrl+V to paste into a GUI app"
+[[ $(<"$TMPDIR/wlcopy-gui.args") == "--type text/plain --sensitive --foreground" ]] || fail "emoji insert helper serves a sensitive clipboard offer in the foreground"
+pass "emoji insert helper serves a sensitive clipboard offer in the foreground"
 
-[[ $(<"$TMPDIR/wtype-gui") != "😀" ]] || fail "emoji insert helper does not inject raw Unicode into a GUI app"
-pass "emoji insert helper does not inject raw Unicode into a GUI app"
+[[ $(<"$TMPDIR/wtype-gui") == "-M ctrl -P v -p v -m ctrl" ]] || fail "emoji insert helper sends Ctrl+V to paste into a GUI app"
+pass "emoji insert helper sends Ctrl+V to paste into a GUI app"
 
 # An untagged window falls back to the paste path.
 : >"$TMPDIR/hyprctl"
