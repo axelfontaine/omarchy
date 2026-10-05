@@ -23,17 +23,10 @@ Item {
 
   // Address of the window that was focused when the picker opened, so the
   // emoji is typed back into it rather than whatever follow_mouse focuses
-  // once the picker closes.
+  // once the picker closes. Empty when no window was focused (e.g. an empty
+  // workspace) - never a previously focused window, which may sit on another
+  // workspace and would pull focus there.
   property string targetWindow: ""
-  property string lastToplevelAddress: ""
-
-  Connections {
-    target: Hyprland
-    function onActiveToplevelChanged() {
-      var t = Hyprland.activeToplevel
-      if (t && t.address) root.lastToplevelAddress = t.address
-    }
-  }
 
   // Shares the [menu] surface tokens — themes that style the menu also
   // style emojis. Selected-cell colors composed in the
@@ -58,8 +51,12 @@ Item {
   property int columns: Math.floor((cardWidth - contentMargin * 2) / cellWidth)
 
   function open(payloadJson) {
+    // Quickshell keeps the last activeToplevel when Hyprland reports no
+    // focused window (an empty workspace), so only trust it when it sits on
+    // the focused workspace.
     var active = Hyprland.activeToplevel
-    root.targetWindow = (active && active.address) ? active.address : root.lastToplevelAddress
+    var onFocusedWorkspace = active && active.workspace && active.workspace === Hyprland.focusedWorkspace
+    root.targetWindow = (onFocusedWorkspace && active.address) ? active.address : ""
     root.opened = true
     root.filterText = ""
     root.selectedIndex = 0
