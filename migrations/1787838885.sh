@@ -13,7 +13,10 @@ OMARCHY_PATH="${OMARCHY_PATH:-/usr/share/omarchy}"
 # Unprivileged pre-filter so machines with no MX Keys -- no Bolt receiver, no
 # Unifying MX Keys, no Bluetooth MX Keys / MX Keys S / MX Keys Mini -- never
 # reach the (password-prompting) hidraw probe. The anchored HID_NAME match
-# keeps "MX Mechanical" out; the detector rejects it too.
+# keeps "MX Keys for Mac" owners from a password prompt for a keyboard the
+# detector rejects anyway. It is narrower than the detector's name match, so a
+# Bluetooth keyboard reporting an unexpected suffix is skipped here; re-run
+# the installer by hand for it.
 grep -qEi 'HID_ID=0003:0000046D:0000C548|:0000408A|MX Keys S|HID_NAME=(Logitech )?MX Keys( Mini)?$' \
   /sys/class/hidraw/*/device/uevent 2>/dev/null || exit 0
 

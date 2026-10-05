@@ -1,10 +1,10 @@
-# Logitech MX Keys / MX Keys S: the MX Keys S action row (emoji, screenshot,
-# dictation, mic mute, lock) sends fixed chords meant for Logi Options+, which
-# does not exist on Linux; the MX Keys has no such row, but its Super+A / Super+D
-# Fn-layer keys do nothing here and its lock key's Super+L toggles the workspace
-# layout. When either keyboard is present -- over Bluetooth, a Unifying receiver
-# or the Bolt receiver -- remap it with keyd so the keys reach their Omarchy
-# equivalents. See default/keyd/logitech-mx-keys.conf and
+# Logitech MX Keys / MX Keys S / MX Keys Mini: the S and Mini action keys
+# (emoji, screenshot, dictation, mic mute, lock) send fixed chords meant for
+# Logi Options+, which does not exist on Linux; on the MX Keys only the lock
+# key's Super+L is remapped. When one of these keyboards is present -- over
+# Bluetooth, a Unifying receiver or the Bolt receiver -- remap it with keyd so
+# the keys reach their Omarchy equivalents. See default/keyd/logitech-mx-keys.conf
+# (including which shortcuts this costs on that keyboard) and
 # default/hypr/bindings/logitech-mx-keys.lua.
 #
 # Also invoked by migrations/1787838885.sh for existing installs. Re-run by hand
