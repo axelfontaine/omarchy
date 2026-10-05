@@ -36,6 +36,8 @@ if mx_keys_ids=$(mx_keys_hw --keyd-ids) && [[ -n $mx_keys_ids ]]; then
 
   # restart, not just enable --now: keyd may already be running for another
   # keyboard, in which case only a restart picks up this new config file.
-  sudo systemctl enable keyd.service
+  # Enable last, so a failed restart leaves the migration's completion check
+  # unsatisfied and the next update retries.
   sudo systemctl restart keyd.service
+  sudo systemctl enable keyd.service
 fi
