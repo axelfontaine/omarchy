@@ -14,6 +14,7 @@ You can see all the main keyboard bindings with `Super + K` (Tmux bindings with 
 | `Ctrl + Alt + Del` | Close all windows |
 | `Super + T`               | Toggle window between tiling/floating             |
 | `Super + J` | Toggle window position (horizontal/vertical) |
+| `Super + Shift + J` | Swap window with its split neighbor (a window beside a stack swaps with the whole stack) |
 | `Super + O`               | Toggle popping window into sticky'n'floating |
 | `Super + L`               | Toggle between dwindle and scrolling layout |
 | `Super + P`               | Toggle pseudo window style (natural v stretch) |
