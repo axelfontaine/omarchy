@@ -67,6 +67,10 @@ locks_1password || fail "system lock locks 1Password when lock on device lock is
 printf '{"security.autolock.onDeviceLock": false}\n' >"$settings"
 ! locks_1password || fail "system lock leaves 1Password unlocked when lock on device lock is off"
 
+printf '{"security.autolock.onDeviceLock": false}garbage\n' >"$settings"
+locks_1password || fail "system lock locks 1Password when its settings file is malformed"
+printf '{"security.autolock.onDeviceLock": false}\n' >"$settings"
+
 mkdir -p "$tmpdir/xdg/1Password/settings"
 mv "$settings" "$tmpdir/xdg/1Password/settings/settings.json"
 ! locks_1password XDG_CONFIG_HOME="$tmpdir/xdg" || fail "system lock reads 1Password's settings from XDG_CONFIG_HOME"
