@@ -54,7 +54,7 @@ mkdir -p "$(dirname "$settings")"
 locks_1password() {
   : >"$call_log"
   # The 1Password lock runs in the background; capturing stdout waits for it.
-  : "$(HOME="$home" XDG_RUNTIME_DIR="$tmpdir" PATH="$mock_bin:$PATH" CALL_LOG="$call_log" "$ROOT/bin/omarchy-system-lock")"
+  : "$(env -u XDG_CONFIG_HOME HOME="$home" "$@" XDG_RUNTIME_DIR="$tmpdir" PATH="$mock_bin:$PATH" CALL_LOG="$call_log" "$ROOT/bin/omarchy-system-lock")"
   rg -q '^timeout .* 1password --lock$' "$call_log"
 }
 
@@ -66,4 +66,8 @@ locks_1password || fail "system lock locks 1Password when lock on device lock is
 
 printf '{"security.autolock.onDeviceLock": false}\n' >"$settings"
 ! locks_1password || fail "system lock leaves 1Password unlocked when lock on device lock is off"
+
+mkdir -p "$tmpdir/xdg/1Password/settings"
+mv "$settings" "$tmpdir/xdg/1Password/settings/settings.json"
+! locks_1password XDG_CONFIG_HOME="$tmpdir/xdg" || fail "system lock reads 1Password's settings from XDG_CONFIG_HOME"
 pass "system lock respects 1Password's lock on device lock setting"
