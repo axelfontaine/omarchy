@@ -40,4 +40,10 @@ if mx_keys_ids=$(mx_keys_hw --keyd-ids) && [[ -n $mx_keys_ids ]]; then
   # unsatisfied and the next update retries.
   sudo systemctl restart keyd.service
   sudo systemctl enable keyd.service
+
+  # The package hook reloads Hyprland before migrations run, when this config
+  # did not exist yet, so the running session skipped the MX Keys binds. Reload
+  # once more now that it does. Outside a Hyprland session (fresh install) this
+  # is a no-op.
+  hyprctl reload >/dev/null 2>&1 || true
 fi
