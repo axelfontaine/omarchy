@@ -39,6 +39,13 @@ o.bind("code:191", "Mute microphone", "omarchy-audio-input-mute", { locked = tru
 o.bind("code:192", "Emojis", "omarchy-shell shell toggle omarchy.emojis")
 o.bind("code:195", "Lock system", "omarchy-system-lock")
 
-if o.cmd_present("voxtype") then
-  o.bind("code:194", "Toggle dictation", "voxtype record toggle")
+-- Same gate as default/hypr/bindings/dictation.lua: bind only once the chosen
+-- dictation backend's own program is installed.
+local pipe = io.popen("omarchy-default-dictation 2>/dev/null", "r")
+local backend = pipe and pipe:read("*l")
+if pipe then
+  pipe:close()
+end
+if backend and backend:match("^[%w%-]+$") and not o.cmd_missing(backend) then
+  o.bind("code:194", "Toggle dictation", "omarchy-dictation toggle")
 end
