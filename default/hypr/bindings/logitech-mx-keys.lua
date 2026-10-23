@@ -1,19 +1,18 @@
 -- Logitech MX Keys / MX Keys S -- action keys
 --
 -- keyd (/etc/keyd/logitech-mx-keys.conf) rewrites the MX Keys S / Mini chorded
--- action keys -- emoji, dictation, lock -- to spare F14, F16 and F17, which
+-- action keys -- emoji, screenshot, dictation, lock -- to spare F14-F17, which
 -- would otherwise land on unrelated shortcuts or nothing. Their mic-mute key
--- already emits a bare F13, and their screenshot key's Super+Shift+S is already
--- Omarchy's screenshot binding. The MX Keys (non-S) Fn+F4 / Fn+F5 Super+A /
--- Super+D chords are left untouched and nothing here binds them. Bind the rest
--- to the matching Omarchy command here.
+-- already emits a bare F13. The MX Keys (non-S) Fn+F4 / Fn+F5 Super+A / Super+D
+-- chords are left untouched and nothing here binds them. Bind the rest to the
+-- matching Omarchy command here.
 --
 -- Bound by keycode (code:191..195 == F13..F17): the F13-F24 keysyms are
 -- missing from many non-US keymaps, so a plain "F14" bind would never match.
 --
 -- That config file is installed only when install/hardware/logitech-mx-keys.sh
--- detects one of these keyboards, so its presence gates these binds. F14, F16
--- and F17 come only from keyd's rewrite of that keyboard. The F13 bind is not
+-- detects one of these keyboards, so its presence gates these binds. F14-F17
+-- come only from keyd's rewrite of that keyboard. The F13 bind is not
 -- device-scoped (keyd passes the bare F13 through), so on a machine with an
 -- MX Keys an F13 key on any other keyboard mutes the microphone too.
 
@@ -37,6 +36,7 @@ end
 
 o.bind("code:191", "Mute microphone", "omarchy-audio-input-mute", { locked = true })
 o.bind("code:192", "Emojis", "omarchy-shell shell toggle omarchy.emojis")
+o.bind("code:193", "Screenshot", "omarchy-capture-screenshot")
 o.bind("code:195", "Lock system", "omarchy-system-lock")
 
 -- Same gate as default/hypr/bindings/dictation.lua: bind only once the chosen
