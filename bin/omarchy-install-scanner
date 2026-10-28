@@ -15,11 +15,14 @@ if [[ -n $pixma_record ]]; then
   pixma_name=${pixma_name//\\032/ }
   echo "Found $pixma_name at $pixma_hostname"
 
+  # Only the line under this marker is ours; addresses the user configured
+  # themselves are left alone, and omarchy-remove-scanner removes just ours.
   PIXMA_CONF="/etc/sane.d/pixma.conf"
-  if grep -qE '^bjnp://' "$PIXMA_CONF"; then
-    sudo sed -i "s|^bjnp://.*|bjnp://$pixma_hostname|" "$PIXMA_CONF"
-  else
-    echo "bjnp://$pixma_hostname" | sudo tee -a "$PIXMA_CONF" >/dev/null
+  PIXMA_MARKER="# Added by omarchy-install-scanner"
+  if grep -qxF "$PIXMA_MARKER" "$PIXMA_CONF"; then
+    sudo sed -i "/^$PIXMA_MARKER\$/{n;s|^bjnp://.*|bjnp://$pixma_hostname|}" "$PIXMA_CONF"
+  elif ! grep -qxF "bjnp://$pixma_hostname" "$PIXMA_CONF"; then
+    printf '%s\nbjnp://%s\n' "$PIXMA_MARKER" "$pixma_hostname" | sudo tee -a "$PIXMA_CONF" >/dev/null
   fi
 fi
 

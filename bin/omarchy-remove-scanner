@@ -1,11 +1,18 @@
 #!/bin/bash
 
-# omarchy:summary=Remove Simple Scan, AirScan, and any Canon PIXMA scanner configuration
+# omarchy:summary=Remove Simple Scan, AirScan, and the Canon PIXMA scanner configuration Omarchy added
 # omarchy:requires-sudo=true
 
-if grep -qE '^bjnp://' /etc/sane.d/pixma.conf 2>/dev/null; then
+set -euo pipefail
+
+PIXMA_CONF="/etc/sane.d/pixma.conf"
+PIXMA_MARKER="# Added by omarchy-install-scanner"
+
+# Drop only the address omarchy-install-scanner wrote (the marker and the line
+# under it); scanner addresses the user configured themselves stay.
+if grep -qxF "$PIXMA_MARKER" "$PIXMA_CONF" 2>/dev/null; then
   echo -e "\nRemoving PIXMA scanner configuration..."
-  sudo sed -i '/^bjnp:\/\//d' /etc/sane.d/pixma.conf
+  sudo sed -i "/^$PIXMA_MARKER\$/{N;d}" "$PIXMA_CONF"
 fi
 
 echo -e "\nRemoving scanning packages..."
