@@ -51,8 +51,18 @@ trap 'rm -rf "$TMPDIR"' EXIT
 
 mkdir -p "$TMPDIR/bin"
 
+# The paste chord reads the clipboard, so it waits for the background wl-copy
+# to publish it first. Without that, the helper could withdraw the offer
+# before the stub ever wrote it, depending on which process the scheduler
+# runs first.
 cat >"$TMPDIR/bin/wtype" <<'SH'
 #!/bin/bash
+if [[ $* == "-M ctrl "* ]]; then
+  for (( i = 0; i < 500; i++ )); do
+    [[ -e $WLCOPY_OUT ]] && break
+    /usr/bin/sleep 0.01
+  done
+fi
 printf '%s' "$*" >"$WTYPE_OUT"
 SH
 
@@ -61,10 +71,13 @@ cat >"$TMPDIR/bin/sleep" <<'SH'
 printf '%s\n' "$*" >>"$SLEEP_OUT"
 SH
 
+# wl-copy publishes the clipboard (args first, then the data, renamed into
+# place so a reader never sees half of it).
 cat >"$TMPDIR/bin/wl-copy" <<'SH'
 #!/bin/bash
 printf '%s' "$*" >"$WLCOPY_OUT.args"
-cat >"$WLCOPY_OUT"
+cat >"$WLCOPY_OUT.tmp"
+mv "$WLCOPY_OUT.tmp" "$WLCOPY_OUT"
 SH
 
 cat >"$TMPDIR/bin/hyprctl" <<'SH'
